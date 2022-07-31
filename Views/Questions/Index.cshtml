@@ -1,0 +1,44 @@
+﻿@model IEnumerable<SD_330_W22SD_Assignment.Models.Question>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (SignInManager.IsSignedIn(User)) 
+{
+    <div style="display: flex">
+        <div style="width: 20%; padding: 1em; text-align: center">
+            <span style="border: 1px solid lightgrey; border-radius: 10px 10px; font-size: 55px">&#128516</span>
+            <h4>Hi @User.Identity?.Name!</h4>
+            <form asp-action="Create">
+                <button type="submit" class="btn" style="background-color: #FF4500">New Question</button>
+            </form>
+        </div>
+        <div style="border-left: 1px solid lightgrey; width: 80%; padding: 1em">
+            <div>
+                <h4>For You</h4>
+            </div>
+            <div>
+                <h4>List of question here</h4>
+            </div>
+        </div>
+    </div>
+    
+}
+
+else 
+{
+    <h4 style="text-align: center">Please Login or Register</h4>
+    <div style="width: 300px; height: 200px; margin: 0 auto; border: 1px solid lightgrey; border-radius: 10px 10px; background: #252729">
+    <form style="display: flex; width: 300px; height: 200px; justify-content: center; align-items: center">
+        <button type="submit" class="btn" style="background-color: #FF4500; margin-right: 10px" asp-area="Identity" asp-page="/Account/Login">Login</button>
+        <button type="submit" class="btn" style="background-color: lightgray" asp-area="Identity" asp-page="/Account/Register">Register</button>
+    </form>
+    </div>
+}
