@@ -9,5 +9,8 @@ namespace SD_330_W22SD_Assignment.Data
             : base(options)
         {
         }
+
+        public DbSet<SD_330_W22SD_Assignment.Models.Question> Question { get; set; }
+        public DbSet<SD_330_W22SD_Assignment.Models.Answer> Answer { get; set; }
     }
 }

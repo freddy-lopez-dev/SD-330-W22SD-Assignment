@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SD_330_W22SD_Assignment.Data;
 
@@ -11,9 +12,10 @@ using SD_330_W22SD_Assignment.Data;
 namespace SD_330_W22SD_Assignment.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220731185950_AddAnswersToUser")]
+    partial class AddAnswersToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -272,9 +274,6 @@ namespace SD_330_W22SD_Assignment.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -291,46 +290,6 @@ namespace SD_330_W22SD_Assignment.Data.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Question");
-                });
-
-            modelBuilder.Entity("SD_330_W22SD_Assignment.Models.QuestionTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("QuestionTag");
-                });
-
-            modelBuilder.Entity("SD_330_W22SD_Assignment.Models.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("SD_330_W22SD_Assignment.Models.ApplicationUser", b =>
@@ -417,31 +376,9 @@ namespace SD_330_W22SD_Assignment.Data.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("SD_330_W22SD_Assignment.Models.QuestionTag", b =>
-                {
-                    b.HasOne("SD_330_W22SD_Assignment.Models.Question", "Question")
-                        .WithMany("QuestionTags")
-                        .HasForeignKey("QuestionId");
-
-                    b.HasOne("SD_330_W22SD_Assignment.Models.Tag", "Tag")
-                        .WithMany("QuestionTags")
-                        .HasForeignKey("TagId");
-
-                    b.Navigation("Question");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("SD_330_W22SD_Assignment.Models.Question", b =>
                 {
                     b.Navigation("Answers");
-
-                    b.Navigation("QuestionTags");
-                });
-
-            modelBuilder.Entity("SD_330_W22SD_Assignment.Models.Tag", b =>
-                {
-                    b.Navigation("QuestionTags");
                 });
 
             modelBuilder.Entity("SD_330_W22SD_Assignment.Models.ApplicationUser", b =>
