@@ -1,49 +1,28 @@
-﻿@model SD_330_W22SD_Assignment.Models.Question
+﻿@model SD_330_W22SD_Assignment.Models.ViewModel.CreatePostViewModel
+@using Microsoft.AspNetCore.Identity
 
-@{
-    ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h1>Create</h1>
-
-<h4>Question</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+    <div style="display: flex">
+        <div style="width: 20%; padding: 1em; text-align: center">
+            <span style="border: 1px solid lightgrey; border-radius: 10px 10px; font-size: 55px">&#128516</span>
+            <h4>@*Hi @User.Identity?.Name!*@</h4>
+            <form asp-action="Create">
+                <button type="submit" class="btn" style="background-color: #FF4500">New Question</button>
+            </form>
+        </div>
+        <div style="border-left: 1px solid lightgrey; width: 80%; padding: 1em">
+            <div>
+                <h4>Post a New Question</h4>
             </div>
-            <div class="form-group">
-                <label asp-for="Body" class="control-label"></label>
-                <input asp-for="Body" class="form-control" />
-                <span asp-validation-for="Body" class="text-danger"></span>
+            <div>
+                <form asp-action="PostQuestion" method="post">
+                    <label style="font-weight: bold; margin-bottom: 10px">Title</label>
+                    <input type="text" placeholder="Title" name="title"/>
+                    <textarea id="mytextarea" name="bodyContent" value="testing123">Enter Text Here</textarea>
+                    <label style="font-weight: bold; margin-bottom: 10px; display: block">Select Tags: (Hold ctrl + click for multiple selections)</label>
+                    @*Studied multiSelect before class https://www.codeproject.com/Articles/771999/ASP-NET-MVC-How-to-Create-a-ListBox*@
+                    @Html.ListBoxFor(m => m.SelectedTags, Model.Tags, new { size = 5 })
+                    <button type="submit">Post</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

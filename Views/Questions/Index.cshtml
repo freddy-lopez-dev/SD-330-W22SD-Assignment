@@ -16,7 +16,7 @@
         <div style="width: 20%; padding: 1em; text-align: center">
             <span style="border: 1px solid lightgrey; border-radius: 10px 10px; font-size: 55px">&#128516</span>
             <h4>Hi @User.Identity?.Name!</h4>
-            <form asp-action="Create">
+            <form asp-action="Create" method="get">
                 <button type="submit" class="btn" style="background-color: #FF4500">New Question</button>
             </form>
         </div>

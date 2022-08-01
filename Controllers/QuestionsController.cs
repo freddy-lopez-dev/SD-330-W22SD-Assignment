@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SD_330_W22SD_Assignment.Data;
 using SD_330_W22SD_Assignment.Models;
+using SD_330_W22SD_Assignment.Models.ViewModel;
 
 namespace SD_330_W22SD_Assignment.Controllers
 {
@@ -48,23 +49,28 @@ namespace SD_330_W22SD_Assignment.Controllers
         // GET: Questions/Create
         public IActionResult Create()
         {
-            return View();
+            List<SelectListItem> currTags = new List<SelectListItem>();
+            _context.Tag.ToList().ForEach(t =>
+            {
+                currTags.Add(new SelectListItem(t.Name, t.Id.ToString()));
+            });
+            CreatePostViewModel CPVM = new CreatePostViewModel()
+            {
+                Tags = currTags
+            };
+
+            return View(CPVM);
         }
 
         // POST: Questions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Body,CreatedDate,UserId")] Question question)
+        public IActionResult PostQuestion(IEnumerable<int> SelectedTags, string title, string bodyContent)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(question);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(question);
+            
+
+            return RedirectToAction("Index");
         }
 
         // GET: Questions/Edit/5
