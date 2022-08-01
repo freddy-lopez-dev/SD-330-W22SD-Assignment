@@ -5,39 +5,42 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Question</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Body)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Body)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div style="display: flex">
+        <div style="width: 15%; padding: 1em; text-align: center">
+            <span style="border: 1px solid lightgrey; border-radius: 10px 10px; font-size: 55px">&#128516</span>
+            <h4>Hi @User.Identity?.Name!</h4>
+            <form asp-action="Create" method="get">
+                <button type="submit" class="btn" style="background-color: #FF4500">New Question</button>
+            </form>
+            <div style="border-top: 1px solid lightgrey; margin-top: 1em">
+                <h4>Interests:</h4>
+            </div>
+        </div>
+        <div style="border-left: 1px solid lightgrey; width: 85%; padding: 1em; paddingleft: 2em">
+            <div style="display: flex; margin-bottom: 1em; justify-content: space-between">
+                <div style="display: flex">
+                    <div>
+                        <h4 style="margin-right: 1em; margin-bottom: 1rem">@Model.Title</h4>
+                        <p style="margin-bottom: 0">@Model.CreatedDate</p>
+                        <p style="margin-bottom: 0">By: @Model.Owner.Email</p>
+                    </div>
+                    <div>
+                        @foreach(var tag in Model.QuestionTags)
+                        {
+                            <button style="background-color: @tag.Tag.BgColor" class="btn">&#@tag.Tag.Emoji @tag.Tag.Name</button>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <form asp-action="Index" method="get">
+                        <button type="submit" class="btn" style="background-color: #FF4500">Back to List</button>
+                    </form>
+                </div>
+            </div>
+            <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
+                <div>
+                    @Html.Raw(Model.Body)
+                </div>
+            </div>
+        </div>
+    </div>

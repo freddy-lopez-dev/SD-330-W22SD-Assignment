@@ -13,19 +13,48 @@
 @if (SignInManager.IsSignedIn(User)) 
 {
     <div style="display: flex">
-        <div style="width: 20%; padding: 1em; text-align: center">
+        <div style="width: 15%; padding: 1em; text-align: center">
             <span style="border: 1px solid lightgrey; border-radius: 10px 10px; font-size: 55px">&#128516</span>
             <h4>Hi @User.Identity?.Name!</h4>
             <form asp-action="Create" method="get">
                 <button type="submit" class="btn" style="background-color: #FF4500">New Question</button>
             </form>
+            <div style="border-top: 1px solid lightgrey; margin-top: 1em">
+                <h4>Interests:</h4>
+            </div>
         </div>
-        <div style="border-left: 1px solid lightgrey; width: 80%; padding: 1em">
+        <div style="border-left: 1px solid lightgrey; width: 85%; padding: 1em; paddingleft: 2em">
             <div>
                 <h4>For You</h4>
             </div>
             <div>
-                <h4>List of question here</h4>
+                @foreach(var item in Model)
+                {
+                    <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
+                        <div style="margin-right: 1em">
+                            <h4>&#129302</h4>
+                        </div>
+                        <div style="background-color: white; border: 0.5px solid #F2F3F4; width: 100%; padding: 1em">
+                            <div style="display: flex; align-items: center;justify-content: space-between">
+                                <div>
+                                    <h4><a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none">@item.Title</a></h4>
+                                    <p style="margin-bottom: 0">@item.CreatedDate</p>
+                                    <p style="margin-bottom: 10px">By: @item.Owner.Email</p>
+                                </div>
+                                <div>
+                                    <p>Answers: @item.Answers.Count()</p>
+                                    <button type="submit" class="btn" style="background-color: #FF4500">Answer this question</button>
+                                </div>
+                                </div>
+                            <div>
+                                @foreach(var tag in item.QuestionTags)
+                            {
+                                <button style="background-color: @tag.Tag.BgColor" class="btn">&#@tag.Tag.Emoji @tag.Tag.Name</button>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -34,11 +63,12 @@
 
 else 
 {
-    <h4 style="text-align: center">Please Login or Register</h4>
-    <div style="width: 300px; height: 200px; margin: 0 auto; border: 1px solid lightgrey; border-radius: 10px 10px; background: #252729">
-    <form style="display: flex; width: 300px; height: 200px; justify-content: center; align-items: center">
-        <button type="submit" class="btn" style="background-color: #FF4500; margin-right: 10px" asp-area="Identity" asp-page="/Account/Login">Login</button>
-        <button type="submit" class="btn" style="background-color: lightgray" asp-area="Identity" asp-page="/Account/Register">Register</button>
-    </form>
+    <h4 style="text-align: center">Welcome to <a class="navbar-brand" asp-area="" asp-controller="Questions" asp-action="Index" style="color: #252729"><span style="color: #FF4500"> Reddit</span>Overflow</a></h4>
+    <div style="width: 300px; height: 200px; margin: 0 auto; border: 1px solid lightgrey; border-radius: 10px 10px; background: #252729; margin-bottom: 2em">
+        <h4 style="text-align: center; color: #E5E6E6; margin-top: 1em">Please Login or Register</h4>
+        <form style="display: flex; width: 300px; height: 100px; justify-content: center; align-items: center">
+            <button type="submit" class="btn" style="background-color: #FF4500; margin-right: 10px" asp-area="Identity" asp-page="/Account/Login">Login</button>
+            <button type="submit" class="btn" style="background-color: lightgray" asp-area="Identity" asp-page="/Account/Register">Register</button>
+        </form>
     </div>
 }

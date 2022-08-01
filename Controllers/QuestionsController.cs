@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +16,24 @@ namespace SD_330_W22SD_Assignment.Controllers
     public class QuestionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public QuestionsController(ApplicationDbContext context)
+        public QuestionsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
-
+        [Authorize]
         // GET: Questions
         public async Task<IActionResult> Index()
         {
               return _context.Question != null ? 
-                          View(await _context.Question.ToListAsync()) :
+                          View(await _context.Question
+                          .Include(q => q.Answers)
+                          .Include(q => q.Owner)
+                          .Include(q => q.QuestionTags)
+                          .ThenInclude(t => t.Tag)
+                          .ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Question'  is null.");
         }
 
@@ -37,6 +46,10 @@ namespace SD_330_W22SD_Assignment.Controllers
             }
 
             var question = await _context.Question
+                .Include(q => q.Answers)
+                .Include(q => q.Owner)
+                .Include(q => q.QuestionTags)
+                .ThenInclude(t => t.Tag)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (question == null)
             {
@@ -62,14 +75,31 @@ namespace SD_330_W22SD_Assignment.Controllers
             return View(CPVM);
         }
 
-        // POST: Questions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public IActionResult PostQuestion(IEnumerable<int> SelectedTags, string title, string bodyContent)
+        public async Task<IActionResult> PostQuestionAsync(IEnumerable<int> SelectedTags, string title, string bodyContent)
         {
-            
-
+            Question newQuestion = new Question();
+            newQuestion.Title = title;
+            newQuestion.Body = bodyContent;
+            string userName = User.Identity.Name;
+            ApplicationUser currUser = await _userManager.FindByNameAsync(userName);
+            List<Tag> listOfTags = new List<Tag>();
+            listOfTags = _context.Tag.Where(t => SelectedTags.Contains(t.Id)).ToList();
+            newQuestion.UserId = currUser.Id;
+            newQuestion.Owner = currUser;
+            listOfTags.ForEach(l =>
+            {
+                QuestionTag newQT = new QuestionTag();
+                newQT.QuestionId = newQuestion.Id;
+                newQT.TagId = l.Id;
+                newQT.Tag = l;
+                newQT.Question = newQuestion;
+                newQuestion.QuestionTags.Add(newQT);
+                _context.QuestionTag.Add(newQT);
+            });
+            _context.Question.Add(newQuestion);
+            currUser.Questions.Add(newQuestion);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
