@@ -18,7 +18,15 @@ namespace SD_330_W22SD_Assignment.Controllers
 
         public async Task<IActionResult> TagQuestion(int Id)
         {
-            TagViewModel TVM = new TagViewModel(Id, _context.Question.ToList(), _context.QuestionTag.ToList(), _context.Tag.ToList());
+            TagViewModel TVM = new TagViewModel(
+                Id, 
+                _context.Question
+                .Include(q => q.Answers)
+                          .Include(q => q.Owner)
+                          .Include(q => q.QuestionTags)
+                          .ThenInclude(t => t.Tag).ToList(),
+                _context.QuestionTag.ToList(),
+                _context.Tag.ToList());
             return View(TVM);
         }
     }

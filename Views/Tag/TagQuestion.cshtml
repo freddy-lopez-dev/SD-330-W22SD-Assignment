@@ -1,7 +1,58 @@
 ﻿@using SD_330_W22SD_Assignment.Models.ViewModel
 @model TagViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 
-@foreach(var question in Model.relatedQuestion) {
-	<h4>@question.Title</h4>
-}
+
+   <div style="display: flex">
+        <div style="width: 15%; padding: 1em; text-align: center">
+            <span style="border: 1px solid lightgrey; border-radius: 10px 10px; font-size: 55px">&#128516</span>
+            <h4>Hi @User.Identity?.Name!</h4>
+            <form asp-action="Create" asp-controller="Questions" method="get">
+                <button type="submit" class="btn" style="background-color: #FF4500">New Question</button>
+            </form>
+            <div style="border-top: 1px solid lightgrey; margin-top: 1em">
+                <h4>Interests:</h4>
+            </div>
+        </div>
+        <div style="border-left: 1px solid lightgrey; width: 85%; padding: 1em; paddingleft: 2em">
+            <div>
+                <h4>@Model.CurrTag.Name - &#@Model.CurrTag.Emoji</h4>
+            </div>
+            <div>
+                @foreach(var item in Model.relatedQuestion)
+                {
+                    <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
+                        <div style="margin-right: 1em">
+                            <h4>&#129302</h4>
+                        </div>
+                        <div style="background-color: white; border: 0.5px solid #F2F3F4; width: 100%; padding: 1em">
+                            <div style="display: flex; align-items: center;justify-content: space-between">
+                                <div>
+                                    <h4><a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none">@item.Title</a></h4>
+                                    <p style="margin-bottom: 0">@item.CreatedDate</p>
+                                    <p style="margin-bottom: 10px">By: @item.Owner.Email</p>
+                                </div>
+                                <div>
+                                    <p>Answers: @item.Answers.Count()</p>
+                                    <form asp-action="Details" asp-route-id="@item.Id" asp-controller="Questions">
+                                        <button type="submit" class="btn" style="background-color: #FF4500">Answer this question</button>
+                                    </form>
+                                </div>
+                                </div>
+                            <div>
+                                @foreach(var tag in item.QuestionTags)
+                            {
+                                <form asp-action="TagQuestion" asp-route-id="@tag.TagId" asp-controller="Tag" style="display: inline">
+                                    <button style="background-color: @tag.Tag.BgColor" class="btn">&#@tag.Tag.Emoji @tag.Tag.Name</button>
+                                </form>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
