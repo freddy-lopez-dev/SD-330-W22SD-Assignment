@@ -31,5 +31,21 @@ namespace SD_330_W22SD_Assignment.Controllers
             _context.SaveChanges();
             return RedirectToAction("Details", "Questions", new { Id });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCommentOnAnswer(int Id, string comment, int questionId)
+        {
+            Answer currAnswer = _context.Answer.First(q => q.Id == Id);
+            Comment newComment = new Comment();
+            newComment.Content = comment;
+            newComment.Answer = currAnswer;
+            currAnswer.Comments.Add(newComment);
+            string userName = User.Identity.Name;
+            ApplicationUser currUser = await _userManager.FindByNameAsync(userName);
+            newComment.Owner = currUser;
+            currUser.Comments.Add(newComment);
+            _context.SaveChanges();
+            return RedirectToAction("Details", "Questions", new { id = questionId });
+        }
     }
 }

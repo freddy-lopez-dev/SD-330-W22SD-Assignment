@@ -54,15 +54,30 @@
                     <input type="text" style="width: 100%; margin-bottom: 1em" placeholder="comment here" name="comment" />
                     <button type="submit" class="btn" style="background-color: #FF4500">Add Comment</button>
                 </form>
-            </div>
+                </div>
             </div>
             <h4>Answers</h4>
         @foreach(var ans in Model.Answer)
         {
-            <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
+            <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; margin-bottom: 1em; align-items: center">
                 <div>
                     @Html.Raw(ans.Content)
                     <p style="font-weight: bold">Posted By: @ans.User.Email</p>
+                </div>
+                <div>
+                    <p style="font-weight: bold">Comments</p>
+                @foreach(var comment in ans.Comments)
+                {
+                    <div style="background-color:white; padding: 1em">
+                        <p>@comment.Content - <span style="font-weight: bold">@comment.Owner.Email</span></p>
+                    </div>
+                }
+                <form asp-action="AddCommentOnAnswer" asp-controller="Comment" method="post">
+                    <input type="hidden" value="@ans.Id" name="id" />
+                    <input type="hidden" value="@Model.Question.Id" name="questionId" />
+                    <input type="text" style="width: 100%; margin-bottom: 1em" placeholder="comment here" name="comment" />
+                    <button type="submit" class="btn" style="background-color: #FF4500">Add Comment</button>
+                </form>
                 </div>
             </div>
         }
