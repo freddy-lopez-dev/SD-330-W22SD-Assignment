@@ -1,9 +1,9 @@
-﻿@model SD_330_W22SD_Assignment.Models.Question
+﻿@using SD_330_W22SD_Assignment.Models.ViewModel
+@model DetailsViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
-@{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
     <div style="display: flex">
         <div style="width: 15%; padding: 1em; text-align: center">
@@ -20,12 +20,12 @@
             <div style="display: flex; margin-bottom: 1em; justify-content: space-between">
                 <div style="display: flex">
                     <div>
-                        <h4 style="margin-right: 1em; margin-bottom: 1rem">@Model.Title</h4>
-                        <p style="margin-bottom: 0">@Model.CreatedDate</p>
-                        <p style="margin-bottom: 0">By: @Model.Owner.Email</p>
+                        <h4 style="margin-right: 1em; margin-bottom: 1rem">@Model.Question.Title</h4>
+                        <p style="margin-bottom: 0">@Model.Question.CreatedDate</p>
+                        <p style="margin-bottom: 0; font-weight: bold">By: @Model.Question.Owner.Email</p>
                     </div>
                     <div>
-                        @foreach(var tag in Model.QuestionTags)
+                        @foreach(var tag in Model.Question.QuestionTags)
                         {
                             <button style="background-color: @tag.Tag.BgColor" class="btn">&#@tag.Tag.Emoji @tag.Tag.Name</button>
                         }
@@ -37,25 +37,39 @@
                     </form>
                 </div>
             </div>
-            <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
+            <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; margin-bottom: 1em; align-items: center">
                 <div>
-                    @Html.Raw(Model.Body)
+                    @Html.Raw(Model.Question.Body)
                 </div>
+                <div>
+                    <p style="font-weight: bold">Comments</p>
+                @foreach(var comment in Model.Question.Comments)
+                {
+                    <div style="background-color:white; padding: 1em">
+                        <p>@comment.Content - <span style="font-weight: bold">@comment.Owner.Email</span></p>
+                    </div>
+                }
+                <form asp-action="AddCommentOnQuestion" asp-controller="Comment" method="post">
+                    <input type="hidden" value="@Model.Question.Id" name="id" />
+                    <input type="text" style="width: 100%; margin-bottom: 1em" placeholder="comment here" name="comment" />
+                    <button type="submit" class="btn" style="background-color: #FF4500">Add Comment</button>
+                </form>
+            </div>
             </div>
             <h4>Answers</h4>
-        @foreach(var ans in Model.Answers)
+        @foreach(var ans in Model.Answer)
         {
             <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
                 <div>
                     @Html.Raw(ans.Content)
-                    <p>Posted By: @ans.User.Email</p>
+                    <p style="font-weight: bold">Posted By: @ans.User.Email</p>
                 </div>
             </div>
         }
         <div>
             <h4>Post an Answer</h4>
             <form asp-action="PostAnswer" method="post">
-                <input type="hidden" value="@Model.Id" name="id" />
+                <input type="hidden" value="@Model.Question.Id" name="id" />
                 <textarea id="mytextarea" name="answerContent" value="testing123">Enter Text Here</textarea>
                 <br />
                 <button type="submit" class="btn" style="background-color: #FF4500">Submit</button>

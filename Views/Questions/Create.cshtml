@@ -22,10 +22,10 @@
             <div>
                 <form asp-action="PostQuestion" method="post">
                     <label style="font-weight: bold; margin-bottom: 10px">Title</label>
-                    <input type="text" placeholder="Title" name="title"/>
-                    <textarea id="mytextarea" name="bodyContent" value="testing123">Enter Text Here</textarea>
-                    <label style="font-weight: bold; margin-bottom: 10px; display: block">Select Tags: (Hold ctrl + click for multiple selections)</label>
-                    @*Studied multiSelect before class https://www.codeproject.com/Articles/771999/ASP-NET-MVC-How-to-Create-a-ListBox*@
+                    <input type="text" placeholder="Title:" required="required" name="title" style="width: 100%; margin-bottom: 1em"/>
+                    <textarea id="mytextarea" name="bodyContent" value="testing123" required="required">Enter Text Here</textarea>
+                    <label style="font-weight: bold; margin-bottom: 10px; margin-top: 10px; display: block">Select Tags: (Hold ctrl + click for multiple selections)</label>
+                    @*Studied ListBox here https://www.codeproject.com/Articles/771999/ASP-NET-MVC-How-to-Create-a-ListBox*@
                     @Html.ListBoxFor(m => m.SelectedTags, Model.Tags, new { size = 5 })
                     <br />
                     <button type="submit" class="btn" style="background-color: #FF4500">Post</button>

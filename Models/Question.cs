@@ -9,8 +9,8 @@
         public string? UserId { get; set; }
         public ApplicationUser Owner { get; set; }
 
-        public ICollection<Answer> Answers { get; set; }
-
+        public ICollection<Answer>? Answers { get; set; }
+        public ICollection<Comment>? Comments { get; set; } = new List<Comment>();
         public ICollection<QuestionTag> QuestionTags { get; set; } = new HashSet<QuestionTag>();
     }
 }

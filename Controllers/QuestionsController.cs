@@ -41,23 +41,15 @@ namespace SD_330_W22SD_Assignment.Controllers
         // GET: Questions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Question == null)
-            {
-                return NotFound();
-            }
-
-            var question = await _context.Question
+            DetailsViewModel DVM = new DetailsViewModel(
+                id, _context.Question
                 .Include(q => q.Answers)
-                .Include(q => q.Owner)
-                .Include(q => q.QuestionTags)
-                .ThenInclude(t => t.Tag)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            return View(question);
+                          .Include(q => q.Owner)
+                          .Include(q => q.Comments)
+                          .Include(q => q.QuestionTags)
+                          .ThenInclude(t => t.Tag).ToList(),
+                _context.Answer.Include(a => a.User).Include(a => a.Comments).ToList());
+            return View(DVM);
         }
 
         // GET: Questions/Create

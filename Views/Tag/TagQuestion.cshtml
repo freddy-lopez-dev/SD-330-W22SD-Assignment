@@ -18,7 +18,7 @@
             </div>
         </div>
         <div style="border-left: 1px solid lightgrey; width: 85%; padding: 1em; paddingleft: 2em">
-            <div>
+            <div style="background-color: @Model.CurrTag.BgColor; padding: 2em">
                 <h4>@Model.CurrTag.Name - &#@Model.CurrTag.Emoji</h4>
             </div>
             <div>
@@ -31,9 +31,9 @@
                         <div style="background-color: white; border: 0.5px solid #F2F3F4; width: 100%; padding: 1em">
                             <div style="display: flex; align-items: center;justify-content: space-between">
                                 <div>
-                                    <h4><a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none">@item.Title</a></h4>
+                                    <h4><a asp-action="Details" asp-route-id="@item.Id" asp-controller="Questions" style="text-decoration: none">@item.Title</a></h4>
                                     <p style="margin-bottom: 0">@item.CreatedDate</p>
-                                    <p style="margin-bottom: 10px">By: @item.Owner.Email</p>
+                                    <p style="margin-bottom: 10px; font-weight: bold">By: @item.Owner.Email</p>
                                 </div>
                                 <div>
                                     <p>Answers: @item.Answers.Count()</p>
