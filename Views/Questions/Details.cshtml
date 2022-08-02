@@ -42,5 +42,24 @@
                     @Html.Raw(Model.Body)
                 </div>
             </div>
+            <h4>Answers</h4>
+        @foreach(var ans in Model.Answers)
+        {
+            <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
+                <div>
+                    @Html.Raw(ans.Content)
+                    <p>Posted By: @ans.User.Email</p>
+                </div>
+            </div>
+        }
+        <div>
+            <h4>Post an Answer</h4>
+            <form asp-action="PostAnswer" method="post">
+                <input type="hidden" value="@Model.Id" name="id" />
+                <textarea id="mytextarea" name="answerContent" value="testing123">Enter Text Here</textarea>
+                <br />
+                <button type="submit" class="btn" style="background-color: #FF4500">Submit</button>
+            </form>
+        </div>
         </div>
     </div>

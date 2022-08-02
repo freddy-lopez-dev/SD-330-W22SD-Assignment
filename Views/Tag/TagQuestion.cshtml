@@ -1,0 +1,7 @@
+﻿@using SD_330_W22SD_Assignment.Models.ViewModel
+@model TagViewModel
+
+
+@foreach(var question in Model.relatedQuestion) {
+	<h4>@question.Title</h4>
+}

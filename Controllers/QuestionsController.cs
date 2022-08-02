@@ -13,6 +13,7 @@ using SD_330_W22SD_Assignment.Models.ViewModel;
 
 namespace SD_330_W22SD_Assignment.Controllers
 {
+    [Authorize]
     public class QuestionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,7 +24,7 @@ namespace SD_330_W22SD_Assignment.Controllers
             _context = context;
             _userManager = userManager;
         }
-        [Authorize]
+
         // GET: Questions
         public async Task<IActionResult> Index()
         {
@@ -73,6 +74,24 @@ namespace SD_330_W22SD_Assignment.Controllers
             };
 
             return View(CPVM);
+        }
+
+        public async Task<IActionResult> PostAnswerAsync(int id, string answerContent)
+        {
+            Question currQuestion = _context.Question.Include(q => q.Answers).First(q => q.Id == id);
+            Answer newAnswer = new Answer();
+            newAnswer.Question = currQuestion;
+            newAnswer.QuesitonId = currQuestion.Id;
+            newAnswer.Content = answerContent;
+            string userName = User.Identity.Name;
+            ApplicationUser currUser = await _userManager.FindByNameAsync(userName);
+            newAnswer.User = currUser;
+            newAnswer.UserId = currUser.Id;
+            currQuestion.Answers.Add(newAnswer);
+            currUser.Answers.Add(newAnswer);
+            _context.Answer.Add(newAnswer);
+            _context.SaveChanges();
+            return RedirectToAction("Details", new { id });
         }
 
         [HttpPost]
