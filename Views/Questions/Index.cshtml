@@ -1,4 +1,8 @@
 ﻿@using SD_330_W22SD_Assignment.Models.ViewModel
+@using X.PagedList;
+@using X.PagedList.Mvc.Bootstrap4.Core
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Bootstrap4;
 @model IndexViewModel
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
@@ -66,6 +70,9 @@
                         </div>
                     </div>
                 }
+            </div>
+            <div>
+                @Html.PagedListPager(Model.SortedQuestions, page => Url.Action("Index", new { page }), Bootstrap4PagedListRenderOptions.PageNumbersOnly)
             </div>
         </div>
     </div>

@@ -26,14 +26,14 @@ namespace SD_330_W22SD_Assignment.Controllers
         }
 
         // GET: Questions
-        public async Task<IActionResult> Index(string? sortVal)
+        public async Task<IActionResult> Index(string? sortVal, int? page)
         {
             IndexViewModel IVM = new IndexViewModel(sortVal, await _context.Question
                           .Include(q => q.Answers)
                           .Include(q => q.Owner)
                           .Include(q => q.QuestionTags)
                           .ThenInclude(t => t.Tag)
-                          .ToListAsync());
+                          .ToListAsync(), page);
             return View(IVM);
         }
 
