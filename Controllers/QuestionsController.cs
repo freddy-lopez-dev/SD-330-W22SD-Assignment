@@ -26,16 +26,15 @@ namespace SD_330_W22SD_Assignment.Controllers
         }
 
         // GET: Questions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? sortVal)
         {
-              return _context.Question != null ? 
-                          View(await _context.Question
+            IndexViewModel IVM = new IndexViewModel(sortVal, await _context.Question
                           .Include(q => q.Answers)
                           .Include(q => q.Owner)
                           .Include(q => q.QuestionTags)
                           .ThenInclude(t => t.Tag)
-                          .ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Question'  is null.");
+                          .ToListAsync());
+            return View(IVM);
         }
 
         // GET: Questions/Details/5
