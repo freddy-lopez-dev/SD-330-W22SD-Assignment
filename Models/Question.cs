@@ -11,6 +11,7 @@
 
         public ICollection<Answer>? Answers { get; set; }
         public ICollection<Comment>? Comments { get; set; } = new List<Comment>();
-        public ICollection<QuestionTag> QuestionTags { get; set; } = new HashSet<QuestionTag>();
+        public ICollection<Vote>? Votes { get; set; } = new List<Vote>();
+        public ICollection<QuestionTag>? QuestionTags { get; set; } = new HashSet<QuestionTag>();
     }
 }
