@@ -5,39 +5,70 @@
 @inject UserManager<ApplicationUser> UserManager
 
 
-
-   <div style="display: flex">
+@if (SignInManager.IsSignedIn(User)) 
+{
+    <div style="display: flex">
         <div style="width: 15%; padding: 1em; text-align: center">
             <span style="border: 1px solid lightgrey; border-radius: 10px 10px; font-size: 55px">&#128516</span>
             <h4>Hi @User.Identity?.Name!</h4>
-            <form asp-action="Create" asp-controller="Questions" method="get">
+            <form asp-action="Create" method="get">
                 <button type="submit" class="btn" style="background-color: #FF4500">New Question</button>
             </form>
             <div style="border-top: 1px solid lightgrey; margin-top: 1em">
                 <h4>Interests:</h4>
             </div>
         </div>
-        <div style="border-left: 1px solid lightgrey; width: 85%; padding: 1em; paddingleft: 2em">
-            <div style="background-color: @Model.CurrTag.BgColor; padding: 2em">
-                <h4>@Model.CurrTag.Name - &#@Model.CurrTag.Emoji</h4>
-            </div>
+        <div style="border-left: 1px solid lightgrey; width: 85%; padding: 1em">
             <div>
+                <div style="background-color: @Model.CurrTag.BgColor; padding: 2em">
+                    <h4>@Model.CurrTag.Name - &#@Model.CurrTag.Emoji</h4>
+                </div>
                 @foreach(var item in Model.relatedQuestion)
                 {
                     <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
-                        <div style="margin-right: 1em">
-                            <h4>&#129302</h4>
+                        <div style="margin-right: 1em; text-align: center">
+                            @if(User.Identity.Name != item.Owner.UserName)
+                            {
+                                Vote checkVote = item.Votes.FirstOrDefault(v => v.User.UserName == User.Identity.Name);
+                                if(checkVote == null)
+                                {
+                                    <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 30px; margin-top: 1em" class="fa fa-regular fa-thumbs-up"></i></a>
+                                    <p style="margin-bottom: 1em">@item.Votes.Count(v => v.VoteType == true)</p>
+                                    <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 30px"class="fa fa-regular fa-thumbs-down"></i></a>
+                                    <p>@item.Votes.Count(v => v.VoteType == false)</p>
+                                } else
+                                {
+                                    if(checkVote.VoteType == true)
+                                    {
+                                        <i style="font-size: 30px; margin-top: 1em" class="fa fa-regular fa-thumbs-up"></i>
+                                        <p style="margin-bottom: 1em">@item.Votes.Count(v => v.VoteType == true)</p>
+                                        <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 30px"class="fa fa-regular fa-thumbs-down"></i></a>
+                                        <p>@item.Votes.Count(v => v.VoteType == false)</p>
+                                    } else
+                                    {
+                                        <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 30px; margin-top: 1em" class="fa fa-regular fa-thumbs-up"></i></a>
+                                        <p style="margin-bottom: 1em">@item.Votes.Count(v => v.VoteType == true)</p>
+                                        <i style="font-size: 30px"class="fa fa-regular fa-thumbs-down"></i>
+                                        <p>@item.Votes.Count(v => v.VoteType == false)</p>
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                <h4>&#128516</h4> 
+                            }
                         </div>
                         <div style="background-color: white; border: 0.5px solid #F2F3F4; width: 100%; padding: 1em">
                             <div style="display: flex; align-items: center;justify-content: space-between">
                                 <div>
-                                    <h4><a asp-action="Details" asp-route-id="@item.Id" asp-controller="Questions" style="text-decoration: none">@item.Title</a></h4>
+                                    <h4><a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none">@item.Title</a></h4>
                                     <p style="margin-bottom: 0">@item.CreatedDate</p>
                                     <p style="margin-bottom: 10px; font-weight: bold">By: @item.Owner.Email</p>
                                 </div>
                                 <div>
                                     <p>Answers: @item.Answers.Count()</p>
-                                    <form asp-action="Details" asp-route-id="@item.Id" asp-controller="Questions">
+                                    <form asp-action="Details" asp-route-id="@item.Id">
                                         <button type="submit" class="btn" style="background-color: #FF4500">Answer this question</button>
                                     </form>
                                 </div>
@@ -54,5 +85,59 @@
                     </div>
                 }
             </div>
+
         </div>
     </div>
+    
+}
+
+else 
+{
+    <div style="display: flex">
+        <div style="width: 15%; padding: 1em; text-align: center">        
+            <h4 style="text-align: center">Welcome to <a class="navbar-brand" asp-area="" asp-controller="Questions" asp-action="Index" style="color: #252729"><span style="color: #FF4500"> Reddit</span>Overflow</a></h4>
+            <div style="background: #252729; padding-top: 2em; ; padding-bottom: 2em">
+                <h4 style="color: #E5E6E6">Please Login or Register</h4>
+                <form>
+                    <button type="submit" class="btn" style="background-color: #FF4500; margin-right: 10px" asp-area="Identity" asp-page="/Account/Login">Login</button>
+                    <button type="submit" class="btn" style="background-color: lightgray" asp-area="Identity" asp-page="/Account/Register">Register</button>
+                </form>
+            </div>
+        </div>
+        <div style="border-left: 1px solid lightgrey; width: 85%; padding: 1em">
+            <div style="background-color: @Model.CurrTag.BgColor; padding: 2em">
+                <h4>@Model.CurrTag.Name - &#@Model.CurrTag.Emoji</h4>
+            </div>
+            <div>
+                @foreach(var item in Model.relatedQuestion)
+                {
+                    <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
+                        <div style="margin-right: 1em">
+                            <h4>&#129302</h4>
+                        </div>
+                        <div style="background-color: white; border: 0.5px solid #F2F3F4; width: 100%; padding: 1em">
+                            <div style="display: flex; align-items: center;justify-content: space-between">
+                                <div>
+                                    <h4><a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none">@item.Title</a></h4>
+                                    <p style="margin-bottom: 0">@item.CreatedDate</p>
+                                    <p style="margin-bottom: 10px; font-weight: bold">By: @item.Owner.Email</p>
+                                </div>
+                                <div>
+                                    <p>Answers: @item.Answers.Count()</p>
+                                </div>
+                                </div>
+                            <div>
+                                @foreach(var tag in item.QuestionTags)
+                            {
+                                <form asp-action="TagQuestion" asp-route-id="@tag.TagId" asp-controller="Tag" style="display: inline">
+                                    <button style="background-color: @tag.Tag.BgColor" class="btn">&#@tag.Tag.Emoji @tag.Tag.Name</button>
+                                </form>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

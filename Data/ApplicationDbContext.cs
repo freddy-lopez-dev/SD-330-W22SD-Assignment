@@ -16,5 +16,6 @@ namespace SD_330_W22SD_Assignment.Data
         public DbSet<SD_330_W22SD_Assignment.Models.Tag> Tag { get; set; }
         public DbSet<SD_330_W22SD_Assignment.Models.QuestionTag> QuestionTag { get; set; }
         public DbSet<SD_330_W22SD_Assignment.Models.Comment> Comment { get; set; }
+        public DbSet<SD_330_W22SD_Assignment.Models.Vote> Vote { get; set; }
     }
 }

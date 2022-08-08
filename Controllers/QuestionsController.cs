@@ -13,7 +13,6 @@ using SD_330_W22SD_Assignment.Models.ViewModel;
 
 namespace SD_330_W22SD_Assignment.Controllers
 {
-    [Authorize]
     public class QuestionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -29,25 +28,26 @@ namespace SD_330_W22SD_Assignment.Controllers
         public async Task<IActionResult> Index(string? sortVal, int? page)
         {
             IndexViewModel IVM = new IndexViewModel(sortVal, await _context.Question
-                          .Include(q => q.Answers)
-                          .Include(q => q.Owner)
-                          .Include(q => q.QuestionTags)
-                          .ThenInclude(t => t.Tag)
-                          .ToListAsync(), page);
+                .Include(q => q.Answers)
+                .Include(q => q.Owner)
+                .Include(q => q.Votes)
+                .Include(q => q.QuestionTags)
+                .ThenInclude(t => t.Tag)
+                .ToListAsync(), page);
             return View(IVM);
         }
 
         // GET: Questions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            DetailsViewModel DVM = new DetailsViewModel(
-                id, _context.Question
+            DetailsViewModel DVM = new DetailsViewModel(id, await _context.Question
                 .Include(q => q.Answers)
-                          .Include(q => q.Owner)
-                          .Include(q => q.Comments)
-                          .Include(q => q.QuestionTags)
-                          .ThenInclude(t => t.Tag).ToList(),
-                _context.Answer.Include(a => a.User).Include(a => a.Comments).ToList());
+                .Include(q => q.Owner)
+                .Include(q => q.Comments)
+                .Include(q => q.QuestionTags)
+                .ThenInclude(t => t.Tag).ToListAsync(),
+                _context.Answer.Include(a => a.User).Include(a => a.Comments).ToList(),
+                _context.Vote.ToList());
             return View(DVM);
         }
 

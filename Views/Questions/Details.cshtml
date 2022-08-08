@@ -4,7 +4,8 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-
+@if (SignInManager.IsSignedIn(User))
+{
     <div style="display: flex">
         <div style="width: 15%; padding: 1em; text-align: center">
             <span style="border: 1px solid lightgrey; border-radius: 10px 10px; font-size: 55px">&#128516</span>
@@ -23,9 +24,53 @@
                         <h4 style="margin-right: 1em; margin-bottom: 1rem">@Model.Question.Title</h4>
                         <p style="margin-bottom: 0">@Model.Question.CreatedDate</p>
                         <p style="margin-bottom: 0; font-weight: bold">By: @Model.Question.Owner.Email</p>
+
+                        @if(User.Identity.Name != @Model.Question.Owner.UserName)
+                            {
+                                Vote checkVote = @Model.Vote.FirstOrDefault(v => v.User.UserName == User.Identity.Name);
+                                if(checkVote == null)
+                                {
+                                    <div style="margin-top: 1em">
+                                    <a asp-action="VoteUpQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 30px; display: inline" class="fa fa-regular fa-thumbs-up"></i></a>
+                                    <p style="display: inline; margin-right: 1em;">@Model.Question.Votes.Count(v => v.VoteType == true)</p>
+                                    <a asp-action="VoteDownQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 30px; display: inline"class="fa fa-regular fa-thumbs-down"></i></a>
+                                    <p style="display: inline">@Model.Question.Votes.Count(v => v.VoteType == false)</p>
+                                    </div>
+                                } else
+                                {
+                                    if(checkVote.VoteType == true)
+                                    {
+                                        <div style="margin-top: 1em">
+                                        <i style="font-size: 30px; margin-top: 1em; display: inline" class="fa fa-regular fa-thumbs-up"></i>
+                                        <p style="margin-bottom: 1em; margin-right: 1em; display: inline">@Model.Question.Votes.Count(v => v.VoteType == true)</p>
+                                        <a asp-action="VoteDownQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 30px; display: inline"class="fa fa-regular fa-thumbs-down"></i></a>
+                                        <p style="display: inline">@Model.Question.Votes.Count(v => v.VoteType == false)</p>
+                                        </div>
+                                    } else
+                                    {
+                                        <div style="margin-top: 1em">
+                                        <a asp-action="VoteUpQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 30px; margin-top: 1em; display: inline" class="fa fa-regular fa-thumbs-up"></i></a>
+                                        <p style="margin-bottom: 1em; margin-right: 1em; display: inline">@Model.Question.Votes.Count(v => v.VoteType == true)</p>
+                                        <i style="font-size: 30px; display: inline"class="fa fa-regular fa-thumbs-down"></i>
+                                        <p style="display: inline">@Model.Question.Votes.Count(v => v.VoteType == false)</p>
+                                        </div>
+                                    }
+                                }
+
+                            }
+                        else
+                            {
+                                <div style="margin-top: 1em">
+                                <i style="font-size: 30px; margin-top: 1em; display: inline" class="fa fa-regular fa-thumbs-up"></i>
+                                <p style="margin-bottom: 1em; margin-right: 1em; display: inline">@Model.Question.Votes.Count(v => v.VoteType == true)</p>
+                                <i style="font-size: 30px; display: inline"class="fa fa-regular fa-thumbs-down"></i>
+                                <p style="display: inline">@Model.Question.Votes.Count(v => v.VoteType == false)</p>
+                                </div>
+                            }
+
                     </div>
                     <div>
-                        @foreach(var tag in Model.Question.QuestionTags)
+                        @foreach (var tag in Model.Question.QuestionTags)
                         {
                             <button style="background-color: @tag.Tag.BgColor" class="btn">&#@tag.Tag.Emoji @tag.Tag.Name</button>
                         }
@@ -43,52 +88,115 @@
                 </div>
                 <div>
                     <p style="font-weight: bold">Comments</p>
-                @foreach(var comment in Model.Question.Comments)
-                {
-                    <div style="background-color:white; padding: 1em">
-                        <p>@comment.Content - <span style="font-weight: bold">@comment.Owner.Email</span></p>
+                    @foreach (var comment in Model.Question.Comments)
+                    {
+                        <div style="background-color:white; padding: 1em">
+                            <p>@comment.Content - <span style="font-weight: bold">@comment.Owner.Email</span></p>
+                        </div>
+                    }
+                    <form asp-action="AddCommentOnQuestion" asp-controller="Comment" method="post">
+                        <input type="hidden" value="@Model.Question.Id" name="id" />
+                        <input type="text" style="width: 100%; margin-bottom: 1em" placeholder="comment here" name="comment" />
+                        <button type="submit" class="btn" style="background-color: #FF4500">Add Comment</button>
+                    </form>
+                </div>
+            </div>
+            <h4>Answers(@Model.Answer.Count())</h4>
+            @foreach (var ans in Model.Answer)
+            {
+                <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; margin-bottom: 1em; align-items: center">
+                    <div>
+                        @Html.Raw(ans.Content)
+                        <p style="font-weight: bold">Posted By: @ans.User.Email</p>
                     </div>
-                }
-                <form asp-action="AddCommentOnQuestion" asp-controller="Comment" method="post">
+                    <div>
+                        <p style="font-weight: bold">Comments</p>
+                        @foreach (var comment in ans.Comments)
+                        {
+                            <div style="background-color:white; padding: 1em">
+                                <p>@comment.Content - <span style="font-weight: bold">@comment.Owner.Email</span></p>
+                            </div>
+                        }
+                        <form asp-action="AddCommentOnAnswer" asp-controller="Comment" method="post">
+                            <input type="hidden" value="@ans.Id" name="id" />
+                            <input type="hidden" value="@Model.Question.Id" name="questionId" />
+                            <input type="text" style="width: 100%; margin-bottom: 1em" placeholder="comment here" name="comment" />
+                            <button type="submit" class="btn" style="background-color: #FF4500">Add Comment</button>
+                        </form>
+                    </div>
+                </div>
+            }
+            <div>
+                <h4>Post an Answer</h4>
+                <form asp-action="PostAnswer" method="post">
                     <input type="hidden" value="@Model.Question.Id" name="id" />
-                    <input type="text" style="width: 100%; margin-bottom: 1em" placeholder="comment here" name="comment" />
-                    <button type="submit" class="btn" style="background-color: #FF4500">Add Comment</button>
+                    <textarea id="mytextarea" name="answerContent" value="testing123">Enter Text Here</textarea>
+                    <br />
+                    <button type="submit" class="btn" style="background-color: #FF4500">Submit</button>
                 </form>
+            </div>
+        </div>
+    </div>
+}
+
+else
+{
+    <div style="display: flex">
+        <div style="width: 15%; padding: 1em; text-align: center">        
+            <h4 style="text-align: center">Welcome to <a class="navbar-brand" asp-area="" asp-controller="Questions" asp-action="Index" style="color: #252729"><span style="color: #FF4500"> Reddit</span>Overflow</a></h4>
+            <div style="background: #252729; padding-top: 2em; ; padding-bottom: 2em">
+                <h4 style="color: #E5E6E6">Please Login or Register</h4>
+                <form>
+                    <button type="submit" class="btn" style="background-color: #FF4500; margin-right: 10px" asp-area="Identity" asp-page="/Account/Login">Login</button>
+                    <button type="submit" class="btn" style="background-color: lightgray" asp-area="Identity" asp-page="/Account/Register">Register</button>
+                </form>
+            </div>
+        </div>
+        <div style="border-left: 1px solid lightgrey; width: 85%; padding: 1em; paddingleft: 2em">
+            <div style="display: flex; margin-bottom: 1em; justify-content: space-between">
+                <div style="display: flex">
+                    <div>
+                        <h4 style="margin-right: 1em; margin-bottom: 1rem">@Model.Question.Title</h4>
+                        <p style="margin-bottom: 0">@Model.Question.CreatedDate</p>
+                        <p style="margin-bottom: 0; font-weight: bold">By: @Model.Question.Owner.Email</p>
+                    </div>
+                    <div>
+                        @foreach (var tag in Model.Question.QuestionTags)
+                        {
+                            <button style="background-color: @tag.Tag.BgColor" class="btn">&#@tag.Tag.Emoji @tag.Tag.Name</button>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <form asp-action="Index" method="get">
+                        <button type="submit" class="btn" style="background-color: #FF4500">Back to List</button>
+                    </form>
+                </div>
+            </div>
+            <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; margin-bottom: 1em; align-items: center">
+                <div>
+                    @Html.Raw(Model.Question.Body)
                 </div>
             </div>
             <h4>Answers</h4>
-        @foreach(var ans in Model.Answer)
-        {
-            <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; margin-bottom: 1em; align-items: center">
-                <div>
-                    @Html.Raw(ans.Content)
-                    <p style="font-weight: bold">Posted By: @ans.User.Email</p>
-                </div>
-                <div>
-                    <p style="font-weight: bold">Comments</p>
-                @foreach(var comment in ans.Comments)
-                {
-                    <div style="background-color:white; padding: 1em">
-                        <p>@comment.Content - <span style="font-weight: bold">@comment.Owner.Email</span></p>
+            @foreach (var ans in Model.Answer)
+            {
+                <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; margin-bottom: 1em; align-items: center">
+                    <div>
+                        @Html.Raw(ans.Content)
+                        <p style="font-weight: bold">Posted By: @ans.User.Email</p>
                     </div>
-                }
-                <form asp-action="AddCommentOnAnswer" asp-controller="Comment" method="post">
-                    <input type="hidden" value="@ans.Id" name="id" />
-                    <input type="hidden" value="@Model.Question.Id" name="questionId" />
-                    <input type="text" style="width: 100%; margin-bottom: 1em" placeholder="comment here" name="comment" />
-                    <button type="submit" class="btn" style="background-color: #FF4500">Add Comment</button>
-                </form>
+                    <div>
+                        <p style="font-weight: bold">Comments</p>
+                        @foreach (var comment in ans.Comments)
+                        {
+                            <div style="background-color:white; padding: 1em">
+                                <p>@comment.Content - <span style="font-weight: bold">@comment.Owner.Email</span></p>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
-        }
-        <div>
-            <h4>Post an Answer</h4>
-            <form asp-action="PostAnswer" method="post">
-                <input type="hidden" value="@Model.Question.Id" name="id" />
-                <textarea id="mytextarea" name="answerContent" value="testing123">Enter Text Here</textarea>
-                <br />
-                <button type="submit" class="btn" style="background-color: #FF4500">Submit</button>
-            </form>
-        </div>
+            }
         </div>
     </div>
+}
