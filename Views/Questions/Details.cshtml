@@ -21,38 +21,31 @@
             <div style="display: flex; margin-bottom: 1em; justify-content: space-between">
                 <div style="display: flex">
                     <div>
-                        <h4 style="margin-right: 1em; margin-bottom: 1rem">@Model.Question.Title</h4>
-                        <p style="margin-bottom: 0">@Model.Question.CreatedDate</p>
-                        <p style="margin-bottom: 0; font-weight: bold">By: @Model.Question.Owner.Email</p>
-
                         @if(User.Identity.Name != @Model.Question.Owner.UserName)
                             {
                                 Vote checkVote = @Model.Vote.FirstOrDefault(v => v.User.UserName == User.Identity.Name);
                                 if(checkVote == null)
                                 {
-                                    <div style="margin-top: 1em">
-                                    <a asp-action="VoteUpQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 30px; display: inline" class="fa fa-regular fa-thumbs-up"></i></a>
-                                    <p style="display: inline; margin-right: 1em;">@Model.Question.Votes.Count(v => v.VoteType == true)</p>
-                                    <a asp-action="VoteDownQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 30px; display: inline"class="fa fa-regular fa-thumbs-down"></i></a>
-                                    <p style="display: inline">@Model.Question.Votes.Count(v => v.VoteType == false)</p>
+                                    <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
+                                        <a asp-action="VoteUpQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                        <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count(v => v.VoteType == true) - Model.Question.Votes.Count(v => v.VoteType == false))</p>
+                                        <a asp-action="VoteDownQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                     </div>
                                 } else
                                 {
                                     if(checkVote.VoteType == true)
                                     {
-                                        <div style="margin-top: 1em">
-                                        <i style="font-size: 30px; margin-top: 1em; display: inline" class="fa fa-regular fa-thumbs-up"></i>
-                                        <p style="margin-bottom: 1em; margin-right: 1em; display: inline">@Model.Question.Votes.Count(v => v.VoteType == true)</p>
-                                        <a asp-action="VoteDownQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 30px; display: inline"class="fa fa-regular fa-thumbs-down"></i></a>
-                                        <p style="display: inline">@Model.Question.Votes.Count(v => v.VoteType == false)</p>
+                                        <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
+                                            <i style="font-size: 50px; color:#FF4500" class="fa fa-solid fa-caret-up"></i>
+                                            <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count(v => v.VoteType == true) - Model.Question.Votes.Count(v => v.VoteType == false))</p>
+                                            <a asp-action="VoteDownQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                         </div>
                                     } else
                                     {
-                                        <div style="margin-top: 1em">
-                                        <a asp-action="VoteUpQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 30px; margin-top: 1em; display: inline" class="fa fa-regular fa-thumbs-up"></i></a>
-                                        <p style="margin-bottom: 1em; margin-right: 1em; display: inline">@Model.Question.Votes.Count(v => v.VoteType == true)</p>
-                                        <i style="font-size: 30px; display: inline"class="fa fa-regular fa-thumbs-down"></i>
-                                        <p style="display: inline">@Model.Question.Votes.Count(v => v.VoteType == false)</p>
+                                        <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
+                                            <a asp-action="VoteUpQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                            <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count(v => v.VoteType == true) - Model.Question.Votes.Count(v => v.VoteType == false))</p>
+                                            <i style="font-size: 50px; color:#FF4500"class="fa fa-solid fa-caret-down"></i>
                                         </div>
                                     }
                                 }
@@ -60,14 +53,17 @@
                             }
                         else
                             {
-                                <div style="margin-top: 1em">
-                                <i style="font-size: 30px; margin-top: 1em; display: inline" class="fa fa-regular fa-thumbs-up"></i>
-                                <p style="margin-bottom: 1em; margin-right: 1em; display: inline">@Model.Question.Votes.Count(v => v.VoteType == true)</p>
-                                <i style="font-size: 30px; display: inline"class="fa fa-regular fa-thumbs-down"></i>
-                                <p style="display: inline">@Model.Question.Votes.Count(v => v.VoteType == false)</p>
+                                <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
+                                    <i style="font-size: 50px" class="fa fa-solid fa-caret-up"></i>
+                                    <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count(v => v.VoteType == true) - Model.Question.Votes.Count(v => v.VoteType == false))</p>
+                                    <i style="font-size: 50px"class="fa fa-solid fa-caret-down"></i>
                                 </div>
                             }
-
+                    </div>
+                    <div>
+                        <h4 style="margin-right: 1em; margin-bottom: 1rem">@Model.Question.Title</h4>
+                        <p style="margin-bottom: 0">@Model.Question.CreatedDate</p>
+                        <p style="margin-bottom: 0; font-weight: bold">By: @Model.Question.Owner.Email</p>
                     </div>
                     <div>
                         @foreach (var tag in Model.Question.QuestionTags)
@@ -104,12 +100,51 @@
             <h4>Answers(@Model.Answer.Count())</h4>
             @foreach (var ans in Model.Answer)
             {
-                <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; margin-bottom: 1em; align-items: center">
+                <div style="display: flex">
                     <div>
-                        @Html.Raw(ans.Content)
-                        <p style="font-weight: bold">Posted By: @ans.User.Email</p>
-                    </div>
-                    <div>
+                    @if(User.Identity.Name != ans.User.UserName)
+                    {
+                        Vote checkVote = ans.Votes.FirstOrDefault(v => v.User.UserName == User.Identity.Name);
+                        if(checkVote == null)
+                        {
+                            <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
+                                <a asp-action="VoteUpAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                <p style="margin-bottom: 0; font-size: 20px">@(ans.Votes.Count(v => v.VoteType == true) - ans.Votes.Count(v => v.VoteType == false))</p>
+                                <a asp-action="VoteDownAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
+                            </div>
+                        } else
+                        {
+                            if(checkVote.VoteType == true)
+                            {
+                                <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
+                                    <i style="font-size: 50px; color:#FF4500" class="fa fa-solid fa-caret-up"></i>
+                                    <p style="margin-bottom: 0; font-size: 20px">@(ans.Votes.Count(v => v.VoteType == true) - ans.Votes.Count(v => v.VoteType == false))</p>
+                                    <a asp-action="VoteDownAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
+                                </div>
+                            } else
+                            {
+                                <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
+                                    <a asp-action="VoteUpAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                    <p style="margin-bottom: 0; font-size: 20px">@(ans.Votes.Count(v => v.VoteType == true) - ans.Votes.Count(v => v.VoteType == false))</p>
+                                    <i style="font-size: 50px; color:#FF4500"class="fa fa-solid fa-caret-down"></i>
+                                </div>
+                            }
+                        }
+                    } else
+                    {
+                        <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
+                            <i style="font-size: 50px" class="fa fa-solid fa-caret-up"></i>
+                            <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count(v => v.VoteType == true) - Model.Question.Votes.Count(v => v.VoteType == false))</p>
+                            <i style="font-size: 50px"class="fa fa-solid fa-caret-down"></i>
+                        </div>
+                    }            
+                </div>
+                    <div style="background-color: #FAFAFB; width: 100%; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; margin-bottom: 1em; align-items: center">
+                        <div>
+                            @Html.Raw(ans.Content)
+                            <p style="font-weight: bold">Posted By: @ans.User.Email</p>
+                        </div>
+                        <div>
                         <p style="font-weight: bold">Comments</p>
                         @foreach (var comment in ans.Comments)
                         {
@@ -123,6 +158,7 @@
                             <input type="text" style="width: 100%; margin-bottom: 1em" placeholder="comment here" name="comment" />
                             <button type="submit" class="btn" style="background-color: #FF4500">Add Comment</button>
                         </form>
+                    </div>
                     </div>
                 </div>
             }

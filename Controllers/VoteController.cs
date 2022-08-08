@@ -43,7 +43,7 @@ namespace SD_330_W22SD_Assignment.Controllers
         {
             string userName = User.Identity.Name;
             ApplicationUser currUser = await _userManager.FindByNameAsync(userName);
-            Vote checkVote = _context.Vote.First(v => v.Question.Id == id && v.User.UserName == userName);
+            Vote checkVote = _context.Vote.FirstOrDefault(v => v.Question.Id == id && v.User.UserName == userName);
             if (checkVote == null)
             {
                 Question currentQuestion = _context.Question.First(q => q.Id == id);
@@ -92,7 +92,7 @@ namespace SD_330_W22SD_Assignment.Controllers
         {
             string userName = User.Identity.Name;
             ApplicationUser currUser = await _userManager.FindByNameAsync(userName);
-            Vote checkVote = _context.Vote.First(v => v.Question.Id == id && v.User.UserName == userName);
+            Vote checkVote = _context.Vote.FirstOrDefault(v => v.Question.Id == id && v.User.UserName == userName);
             if (checkVote == null)
             {
                 Question currentQuestion = _context.Question.First(q => q.Id == id);
@@ -110,6 +110,54 @@ namespace SD_330_W22SD_Assignment.Controllers
                 checkVote.VoteType = false;
                 _context.SaveChanges();
                 return RedirectToAction("Details", "Questions", new { id });
+            }
+        }
+        public async Task<IActionResult> VoteUpAnswerAsync(int? id, int? questionId)
+        {
+            string userName = User.Identity.Name;
+            ApplicationUser currUser = await _userManager.FindByNameAsync(userName);
+            Vote checkVote = _context.Vote.FirstOrDefault(v => v.Answer.Id == id && v.User.UserName == userName);
+            if (checkVote == null)
+            {
+                Answer currentAnswer = _context.Answer.First(a => a.Id == id);
+                Vote newVote = new Vote();
+                newVote.Answer = currentAnswer;
+                newVote.User = currUser;
+                newVote.VoteType = true;
+                currentAnswer.Votes.Add(newVote);
+                currUser.Votes.Add(newVote);
+                _context.SaveChanges();
+                return RedirectToAction("Details", "Questions", new { id = questionId });
+            }
+            else
+            {
+                checkVote.VoteType = true;
+                _context.SaveChanges();
+                return RedirectToAction("Details", "Questions", new { id = questionId });
+            }
+        }
+        public async Task<IActionResult> VoteDownAnswerAsync(int? id, int? questionId)
+        {
+            string userName = User.Identity.Name;
+            ApplicationUser currUser = await _userManager.FindByNameAsync(userName);
+            Vote checkVote = _context.Vote.FirstOrDefault(v => v.Answer.Id == id && v.User.UserName == userName);
+            if (checkVote == null)
+            {
+                Answer currentAnswer = _context.Answer.First(a => a.Id == id);
+                Vote newVote = new Vote();
+                newVote.Answer = currentAnswer;
+                newVote.User = currUser;
+                newVote.VoteType = false;
+                currentAnswer.Votes.Add(newVote);
+                currUser.Votes.Add(newVote);
+                _context.SaveChanges();
+                return RedirectToAction("Details", "Questions", new { id = questionId });
+            }
+            else
+            {
+                checkVote.VoteType = false;
+                _context.SaveChanges();
+                return RedirectToAction("Details", "Questions", new { id = questionId });
             }
         }
     }

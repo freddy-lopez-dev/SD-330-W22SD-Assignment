@@ -15,7 +15,8 @@
                 Answer.Add(answers.First(a => a.Id == q.Id));
             });
 
-            Vote = votes.Where(v => v.Question.Id == id).ToList();
+            List<Vote> filteredVote = votes.Where(v => v.Question != null).ToList();
+            Vote = filteredVote.Where(v => v.Question.Id == id).ToList();
         }
     }
 }
