@@ -49,19 +49,19 @@
                                 if(checkVote == null)
                                 {
                                     <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
-                                    <p style="margin-bottom: 0; font-size: 20px">@(item.Votes.Count(v => v.VoteType == true) - item.Votes.Count(v => v.VoteType == false))</p>
+                                    <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
                                     <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                 } else
                                 {
                                     if(checkVote.VoteType == true)
                                     {
                                         <i style="font-size: 50px; color:#FF4500" class="fa fa-solid fa-caret-up"></i>
-                                        <p style="margin-bottom: 0; font-size: 20px">@(item.Votes.Count(v => v.VoteType == true) - item.Votes.Count(v => v.VoteType == false))</p>
+                                        <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
                                         <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                     } else
                                     {
                                         <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
-                                        <p style="margin-bottom: 0; font-size: 20px">@(item.Votes.Count(v => v.VoteType == true) - item.Votes.Count(v => v.VoteType == false))</p>
+                                        <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
                                         <i style="font-size: 50px; color:#FF4500"class="fa fa-solid fa-caret-down"></i>
                                     }
                                 }
@@ -70,7 +70,7 @@
                             else
                             {
                                 <i style="font-size: 50px" class="fa fa-solid fa-caret-up"></i>
-                                <p style="margin-bottom: 0; font-size: 20px">@(item.Votes.Count(v => v.VoteType == true) - item.Votes.Count(v => v.VoteType == false))</p>
+                                <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
                                 <i style="font-size: 50px"class="fa fa-solid fa-caret-down"></i>
                             }
                         </div>

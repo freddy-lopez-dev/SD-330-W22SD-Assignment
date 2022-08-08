@@ -23,8 +23,22 @@ namespace SD_330_W22SD_Assignment.Models.ViewModel
             {
                 SortedQuestions = questions.OrderByDescending(q => q.Answers.Count()).ToList().ToPagedList(page ?? 1, 10);
             }
-            
 
+            SortedQuestions.ToList().ForEach(q =>
+            {
+                int test = q.VoteCtr;
+                int trueCtr = q.Votes.Count(v => v.VoteType == true);
+                int falseCtr = q.Votes.Count(v => v.VoteType == false);
+                for(int index = 0; index < falseCtr; index++)
+                {
+                    test--;
+                }
+                for(int index = 0; index < trueCtr; index++)
+                {
+                    test++;
+                }
+                q.VoteCtr = test;
+            });
         }
     }
 }

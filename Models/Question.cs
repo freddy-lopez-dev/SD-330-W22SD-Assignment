@@ -8,7 +8,7 @@
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public string? UserId { get; set; }
         public ApplicationUser Owner { get; set; }
-
+        public int VoteCtr { get; set; } = 0;
         public ICollection<Answer>? Answers { get; set; }
         public ICollection<Comment>? Comments { get; set; } = new List<Comment>();
         public ICollection<Vote>? Votes { get; set; } = new List<Vote>();

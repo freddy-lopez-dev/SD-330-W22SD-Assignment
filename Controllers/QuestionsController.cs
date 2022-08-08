@@ -31,6 +31,7 @@ namespace SD_330_W22SD_Assignment.Controllers
                 .Include(q => q.Answers)
                 .Include(q => q.Owner)
                 .Include(q => q.Votes)
+                .ThenInclude(v => v.User)
                 .Include(q => q.QuestionTags)
                 .ThenInclude(t => t.Tag)
                 .ToListAsync(), page);
@@ -47,7 +48,7 @@ namespace SD_330_W22SD_Assignment.Controllers
                 .Include(q => q.QuestionTags)
                 .ThenInclude(t => t.Tag).ToListAsync(),
                 _context.Answer.Include(a => a.User).Include(a => a.Comments).ToList(),
-                _context.Vote.ToList());
+                _context.Vote.Include(v => v.User).ToList());
             return View(DVM);
         }
 
