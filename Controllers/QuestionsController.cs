@@ -27,6 +27,8 @@ namespace SD_330_W22SD_Assignment.Controllers
         // GET: Questions
         public async Task<IActionResult> Index(string? sortVal, int? page)
         {
+            string userName = User.Identity.Name;
+            ApplicationUser currUser = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
             IndexViewModel IVM = new IndexViewModel(sortVal, await _context.Question
                 .Include(q => q.Answers)
                 .Include(q => q.Owner)
@@ -34,7 +36,8 @@ namespace SD_330_W22SD_Assignment.Controllers
                 .ThenInclude(v => v.User)
                 .Include(q => q.QuestionTags)
                 .ThenInclude(t => t.Tag)
-                .ToListAsync(), page);
+                .ToListAsync(),
+                page, currUser);
             return View(IVM);
         }
 

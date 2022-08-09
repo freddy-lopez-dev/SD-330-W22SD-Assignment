@@ -9,8 +9,14 @@
         public Question? Question { get; set; }
         public string? UserId { get; set; }
         public ApplicationUser? User { get; set; }
+        public int? VoteCtr { get; set; }
 
         public ICollection<Comment>? Comments { get; set; } = new List<Comment>();
         public ICollection<Vote>? Votes { get; set; } = new List<Vote>();
+
+        public Answer ()
+        {
+            VoteCtr = 0;
+        }
     }
 }

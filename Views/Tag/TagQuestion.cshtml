@@ -32,31 +32,30 @@
                                 Vote checkVote = item.Votes.FirstOrDefault(v => v.User.UserName == User.Identity.Name);
                                 if(checkVote == null)
                                 {
-                                    <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 30px; margin-top: 1em" class="fa fa-regular fa-thumbs-up"></i></a>
-                                    <p style="margin-bottom: 1em">@item.Votes.Count(v => v.VoteType == true)</p>
-                                    <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 30px"class="fa fa-regular fa-thumbs-down"></i></a>
-                                    <p>@item.Votes.Count(v => v.VoteType == false)</p>
+                                    <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id" asp-route-pageId="0"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                    <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
+                                    <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id" asp-route-pageId="0"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                 } else
                                 {
                                     if(checkVote.VoteType == true)
                                     {
-                                        <i style="font-size: 30px; margin-top: 1em" class="fa fa-regular fa-thumbs-up"></i>
-                                        <p style="margin-bottom: 1em">@item.Votes.Count(v => v.VoteType == true)</p>
-                                        <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 30px"class="fa fa-regular fa-thumbs-down"></i></a>
-                                        <p>@item.Votes.Count(v => v.VoteType == false)</p>
+                                        <i style="font-size: 50px; color:#FF4500" class="fa fa-solid fa-caret-up"></i>
+                                        <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
+                                        <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id" asp-route-pageId="0"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                     } else
                                     {
-                                        <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 30px; margin-top: 1em" class="fa fa-regular fa-thumbs-up"></i></a>
-                                        <p style="margin-bottom: 1em">@item.Votes.Count(v => v.VoteType == true)</p>
-                                        <i style="font-size: 30px"class="fa fa-regular fa-thumbs-down"></i>
-                                        <p>@item.Votes.Count(v => v.VoteType == false)</p>
+                                        <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id" asp-route-pageId="0"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                        <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
+                                        <i style="font-size: 50px; color:#FF4500"class="fa fa-solid fa-caret-down"></i>
                                     }
                                 }
 
                             }
                             else
                             {
-                                <h4>&#128516</h4> 
+                                <i style="font-size: 50px" class="fa fa-solid fa-caret-up"></i>
+                                <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
+                                <i style="font-size: 50px"class="fa fa-solid fa-caret-down"></i>
                             }
                         </div>
                         <div style="background-color: white; border: 0.5px solid #F2F3F4; width: 100%; padding: 1em">

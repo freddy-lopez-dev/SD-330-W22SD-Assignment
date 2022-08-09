@@ -27,9 +27,9 @@
                                 if(checkVote == null)
                                 {
                                     <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
-                                        <a asp-action="VoteUpQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
-                                        <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count() - Model.Question.Votes.Count(v => v.VoteType == false))</p>
-                                        <a asp-action="VoteDownQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
+                                        <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                        <p style="margin-bottom: 0; font-size: 20px">@Model.Question.VoteCtr</p>
+                                        <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                     </div>
                                 } else
                                 {
@@ -37,14 +37,14 @@
                                     {
                                         <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
                                             <i style="font-size: 50px; color:#FF4500" class="fa fa-solid fa-caret-up"></i>
-                                            <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count() - Model.Question.Votes.Count(v => v.VoteType == false))</p>
-                                            <a asp-action="VoteDownQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
+                                            <p style="margin-bottom: 0; font-size: 20px">@Model.Question.VoteCtr</p>
+                                            <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                         </div>
                                     } else
                                     {
                                         <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
-                                            <a asp-action="VoteUpQuestionDetails" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
-                                            <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count() - Model.Question.Votes.Count(v => v.VoteType == false))</p>
+                                            <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                            <p style="margin-bottom: 0; font-size: 20px">@Model.Question.VoteCtr</p>
                                             <i style="font-size: 50px; color:#FF4500"class="fa fa-solid fa-caret-down"></i>
                                         </div>
                                     }
@@ -55,7 +55,7 @@
                             {
                                 <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
                                     <i style="font-size: 50px" class="fa fa-solid fa-caret-up"></i>
-                                    <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count() - Model.Question.Votes.Count(v => v.VoteType == false))</p>
+                                    <p style="margin-bottom: 0; font-size: 20px">@Model.Question.VoteCtr</p>
                                     <i style="font-size: 50px"class="fa fa-solid fa-caret-down"></i>
                                 </div>
                             }
@@ -109,7 +109,7 @@
                         {
                             <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
                                 <a asp-action="VoteUpAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
-                                <p style="margin-bottom: 0; font-size: 20px">@(ans.Votes.Count(v => v.VoteType == true) - ans.Votes.Count(v => v.VoteType == false))</p>
+                                <p style="margin-bottom: 0; font-size: 20px">@ans.VoteCtr</p>
                                 <a asp-action="VoteDownAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                             </div>
                         } else
@@ -118,14 +118,14 @@
                             {
                                 <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
                                     <i style="font-size: 50px; color:#FF4500" class="fa fa-solid fa-caret-up"></i>
-                                    <p style="margin-bottom: 0; font-size: 20px">@(ans.Votes.Count(v => v.VoteType == true) - ans.Votes.Count(v => v.VoteType == false))</p>
+                                    <p style="margin-bottom: 0; font-size: 20px">@ans.VoteCtr</p>
                                     <a asp-action="VoteDownAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                 </div>
                             } else
                             {
                                 <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
                                     <a asp-action="VoteUpAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
-                                    <p style="margin-bottom: 0; font-size: 20px">@(ans.Votes.Count(v => v.VoteType == true) - ans.Votes.Count(v => v.VoteType == false))</p>
+                                    <p style="margin-bottom: 0; font-size: 20px">@ans.VoteCtr</p>
                                     <i style="font-size: 50px; color:#FF4500"class="fa fa-solid fa-caret-down"></i>
                                 </div>
                             }
@@ -134,7 +134,7 @@
                     {
                         <div style="margin-top: 0em; margin-right: 1em; margin-left: 1em; text-align: center">
                             <i style="font-size: 50px" class="fa fa-solid fa-caret-up"></i>
-                            <p style="margin-bottom: 0; font-size: 20px">@(Model.Question.Votes.Count(v => v.VoteType == true) - Model.Question.Votes.Count(v => v.VoteType == false))</p>
+                            <p style="margin-bottom: 0; font-size: 20px">@ans.VoteCtr</p>
                             <i style="font-size: 50px"class="fa fa-solid fa-caret-down"></i>
                         </div>
                     }            

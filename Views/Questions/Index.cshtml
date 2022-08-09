@@ -25,7 +25,8 @@
                 <button type="submit" class="btn" style="background-color: #FF4500">New Question</button>
             </form>
             <div style="border-top: 1px solid lightgrey; margin-top: 1em">
-                <h4>Interests:</h4>
+                <h4>Reputation:</h4>
+                <h4>@Model.User.Reputation</h4>
             </div>
         </div>
         <div style="border-left: 1px solid lightgrey; width: 85%; padding: 1em">
@@ -48,19 +49,19 @@
                                 Vote checkVote = item.Votes.FirstOrDefault(v => v.User.UserName == User.Identity.Name);
                                 if(checkVote == null)
                                 {
-                                    <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                    <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id" asp-route-pageId="0"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
                                     <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
-                                    <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
+                                    <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id" asp-route-pageId="0"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                 } else
                                 {
                                     if(checkVote.VoteType == true)
                                     {
                                         <i style="font-size: 50px; color:#FF4500" class="fa fa-solid fa-caret-up"></i>
                                         <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
-                                        <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
+                                        <a asp-action="VoteDownQuestion" asp-controller="Vote" asp-route-id="@item.Id" asp-route-pageId="0"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
                                     } else
                                     {
-                                        <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
+                                        <a asp-action="VoteUpQuestion" asp-controller="Vote" asp-route-id="@item.Id" asp-route-pageId="0"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
                                         <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
                                         <i style="font-size: 50px; color:#FF4500"class="fa fa-solid fa-caret-down"></i>
                                     }
