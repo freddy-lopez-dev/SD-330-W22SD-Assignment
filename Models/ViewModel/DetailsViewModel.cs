@@ -19,7 +19,8 @@
             List<Vote> filteredVote = votes.Where(v => v.Question != null).ToList();
             Vote = filteredVote.Where(v => v.Question.Id == id).ToList();
 
-            Answer.OrderByDescending(a => a.IsCorrect);
+            Answer = Answer.OrderByDescending(a => a.IsCorrect).ToList();
+
             CorrectAnswer = Answer.FirstOrDefault(a => a.IsCorrect == true);
         }
     }

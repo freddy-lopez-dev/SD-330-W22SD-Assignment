@@ -18,6 +18,7 @@
         public Answer ()
         {
             VoteCtr = 0;
+            IsCorrect = false;
         }
     }
 }
