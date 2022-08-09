@@ -4,6 +4,7 @@
     {
         public Question Question { get; set; }
         public List<Answer> Answer { get; set; } = new List<Answer>();
+        public Answer CorrectAnswer { get; set; }
         public List<Vote> Vote { get; set; } = new List<Vote>();
 
         public DetailsViewModel(int? id, List<Question> questions, List<Answer> answers, List<Vote> votes)
@@ -17,6 +18,9 @@
 
             List<Vote> filteredVote = votes.Where(v => v.Question != null).ToList();
             Vote = filteredVote.Where(v => v.Question.Id == id).ToList();
+
+            Answer.OrderByDescending(a => a.IsCorrect);
+            CorrectAnswer = Answer.FirstOrDefault(a => a.IsCorrect == true);
         }
     }
 }

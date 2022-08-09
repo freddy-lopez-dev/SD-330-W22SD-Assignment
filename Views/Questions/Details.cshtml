@@ -111,7 +111,6 @@
                                 <a asp-action="VoteUpAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
                                 <p style="margin-bottom: 0; font-size: 20px">@ans.VoteCtr</p>
                                 <a asp-action="VoteDownAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
-                                <i style="font-size: 40px; color: #BABFC3" class="fa fa-solid fa-check"></i>
                             </div>
                         } else
                         {
@@ -121,7 +120,6 @@
                                     <i style="font-size: 50px; color:#FF4500" class="fa fa-solid fa-caret-up"></i>
                                     <p style="margin-bottom: 0; font-size: 20px">@ans.VoteCtr</p>
                                     <a asp-action="VoteDownAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3"class="fa fa-solid fa-caret-down"></i></a>
-                                    <i style="font-size: 40px; color: #BABFC3" class="fa fa-solid fa-check"></i>
                                 </div>
                             } else
                             {
@@ -129,7 +127,6 @@
                                     <a asp-action="VoteUpAnswer" asp-controller="Vote" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 50px; color: #BABFC3" class="fa fa-solid fa-caret-up"></i></a>
                                     <p style="margin-bottom: 0; font-size: 20px">@ans.VoteCtr</p>
                                     <i style="font-size: 50px; color:#FF4500"class="fa fa-solid fa-caret-down"></i>
-                                    <i style="font-size: 40px; color: #BABFC3" class="fa fa-solid fa-check"></i>
                                 </div>
                             }
                         }
@@ -139,9 +136,31 @@
                             <i style="font-size: 50px" class="fa fa-solid fa-caret-up"></i>
                             <p style="margin-bottom: 0; font-size: 20px">@ans.VoteCtr</p>
                             <i style="font-size: 50px"class="fa fa-solid fa-caret-down"></i>
-                            <i style="font-size: 40px; color: #BABFC3" class="fa fa-solid fa-check"></i>
                         </div>
-                    }            
+                    }
+
+                    @if(User.Identity.Name == @Model.Question.Owner.UserName)
+                    {
+                            if(Model.CorrectAnswer == null)
+                            {
+                                <div style="margin-left: 1em;">
+                                    <a asp-action="MarkAsCorrect" asp-controller="Questions" asp-route-id="@ans.Id" asp-route-questionId="@Model.Question.Id"><i style="font-size: 40px; color: #BABFC3" class="fa fa-solid fa-check"></i></a>
+                                </div>
+                            } else if(Model.CorrectAnswer == ans)
+                            {
+                                <div style="margin-left: 1em;">
+                                    <i style="font-size: 40px; color: forestgreen" class="fa fa-solid fa-check"></i>
+                                </div>
+                            }
+                    } else
+                    {
+                        if(Model.CorrectAnswer == ans)
+                        {
+                            <div style="margin-left: 1em;">
+                                <i style="font-size: 40px; color: forestgreen" class="fa fa-solid fa-check"></i>
+                            </div>
+                        } 
+                    }
                 </div>
                     <div style="background-color: #FAFAFB; width: 100%; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; margin-bottom: 1em; align-items: center">
                         <div>

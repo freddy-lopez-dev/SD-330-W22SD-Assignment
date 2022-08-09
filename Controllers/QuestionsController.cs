@@ -71,6 +71,7 @@ namespace SD_330_W22SD_Assignment.Controllers
             return View(CPVM);
         }
 
+        [HttpPost]
         public async Task<IActionResult> PostAnswerAsync(int id, string answerContent)
         {
             Question currQuestion = _context.Question.Include(q => q.Answers).First(q => q.Id == id);
@@ -115,6 +116,14 @@ namespace SD_330_W22SD_Assignment.Controllers
             currUser.Questions.Add(newQuestion);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public IActionResult MarkAsCorrect(int? id, int? questionId)
+        {
+            Answer currAnswer = _context.Answer.First(a => a.Id == id);
+            currAnswer.IsCorrect = true;
+            _context.SaveChanges();
+            return RedirectToAction("Details", new { id = questionId });
         }
 
         // GET: Questions/Edit/5
