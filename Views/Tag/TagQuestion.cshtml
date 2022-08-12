@@ -11,7 +11,7 @@
         <div style="width: 15%; padding: 1em; text-align: center">
             <span style="border: 1px solid lightgrey; border-radius: 10px 10px; font-size: 55px">&#128516</span>
             <h4>Hi @User.Identity?.Name!</h4>
-            <form asp-action="Create" method="get">
+            <form asp-action="Create" asp-controller="Questions">
                 <button type="submit" class="btn" style="background-color: #FF4500">New Question</button>
             </form>
             <div style="border-top: 1px solid lightgrey; margin-top: 1em">
@@ -67,7 +67,7 @@
                                 </div>
                                 <div>
                                     <p>Answers: @item.Answers.Count()</p>
-                                    <form asp-action="Details" asp-route-id="@item.Id">
+                                    <form asp-action="Details" asp-controller="Questions" asp-route-id="@item.Id">
                                         <button type="submit" class="btn" style="background-color: #FF4500">Answer this question</button>
                                     </form>
                                 </div>

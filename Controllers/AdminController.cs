@@ -60,7 +60,11 @@ namespace SD_330_W22SD_Assignment.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Question'  is null.");
             }
             var question = await _context.Question.FindAsync(id);
-            var questionTag = await _context.QuestionTag.FirstAsync(qt => qt.QuestionId == id);
+            List<QuestionTag> updatedListQT = _context.QuestionTag.Where(qt => qt.QuestionId == id).ToList();
+            updatedListQT.ForEach(uqt =>
+            {
+                _context.QuestionTag.Remove(uqt);
+            });
             List<Answer> updatedAnswerList = _context.Answer.Where(a => a.QuesitonId == id).ToList();
             updatedAnswerList.ForEach(ua =>
             {
@@ -74,10 +78,9 @@ namespace SD_330_W22SD_Assignment.Controllers
             questionComments.ForEach(qc => { _context.Comment.Remove(qc); });
             List<Vote> questionVote = _context.Vote.Where(v => v.Question == question).ToList();
             questionVote.ForEach(qv => { _context.Vote.Remove(qv); });
-            if (question != null && questionTag != null)
+            if (question != null)
             {
                 _context.Question.Remove(question);
-                _context.QuestionTag.Remove(questionTag);
             }
             
             await _context.SaveChangesAsync();

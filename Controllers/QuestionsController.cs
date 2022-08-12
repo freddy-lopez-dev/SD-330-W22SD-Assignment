@@ -56,6 +56,7 @@ namespace SD_330_W22SD_Assignment.Controllers
         }
 
         // GET: Questions/Create
+        [Authorize]
         public IActionResult Create()
         {
             List<SelectListItem> currTags = new List<SelectListItem>();
