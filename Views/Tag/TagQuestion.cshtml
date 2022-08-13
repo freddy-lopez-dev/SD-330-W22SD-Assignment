@@ -111,13 +111,15 @@ else
                 @foreach(var item in Model.relatedQuestion)
                 {
                     <div style="background-color: #FAFAFB; border: 0.5px solid #F2F3F4; border-radius: 5px 5px; padding: 1em; display: flex; margin-bottom: 1em; align-items: center">
-                        <div style="margin-right: 1em">
-                            <h4>&#129302</h4>
+                        <div style="margin-right: 1em; text-align: center">
+                            <i style="font-size: 50px" class="fa fa-solid fa-caret-up"></i>
+                            <p style="margin-bottom: 0; font-size: 20px">@item.VoteCtr</p>
+                            <i style="font-size: 50px"class="fa fa-solid fa-caret-down"></i>
                         </div>
                         <div style="background-color: white; border: 0.5px solid #F2F3F4; width: 100%; padding: 1em">
                             <div style="display: flex; align-items: center;justify-content: space-between">
                                 <div>
-                                    <h4><a asp-action="Details" asp-route-id="@item.Id" style="text-decoration: none">@item.Title</a></h4>
+                                    <h4><a asp-action="Details" asp-controller="Questions" asp-route-id="@item.Id" style="text-decoration: none">@item.Title</a></h4>
                                     <p style="margin-bottom: 0">@item.CreatedDate</p>
                                     <p style="margin-bottom: 10px; font-weight: bold">By: @item.Owner.Email</p>
                                 </div>
